@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accesso Admin — OTA</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --green: #2D5016;
+      --green-mid: #3D6B1F;
+      --green-light: #E8F0DC;
+      --green-pale: #F4F8EE;
+      --gold: #B8922A;
+      --cream: #FAF8F4;
+      --white: #FFFFFF;
+      --text-dark: #1A1A18;
+      --text-mid: #4A4A45;
+      --text-light: #8A8A82;
+      --border: #E2DDD5;
+      --danger: #C0392B;
+      --danger-bg: #FDECEA;
+      --font-d: 'Cormorant Garamond', Georgia, serif;
+      --font-b: 'DM Sans', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--cream);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(45, 80, 22, .05) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(45, 80, 22, .05) 60px);
+      pointer-events: none;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 2.25rem;
+      width: 100%;
+      max-width: 400px;
+      position: relative;
+      box-shadow: 0 8px 48px rgba(45, 80, 22, .1);
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .brand-icon {
+      display: inline-flex;
+      width: 56px;
+      height: 56px;
+      background: var(--green);
+      border-radius: 14px;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    .brand h1 {
+      font-family: var(--font-d);
+      font-size: 1.7rem;
+      color: var(--green);
+      line-height: 1.1;
+    }
+
+    .brand p {
+      font-size: .8rem;
+      color: var(--text-light);
+      margin-top: .35rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+      margin-bottom: 6px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      padding: 12px 42px 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font-b);
+      font-size: .95rem;
+      color: var(--text-dark);
+      background: var(--white);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--green);
+    }
+
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-light);
+      font-size: .85rem;
+      padding: 4px;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-b);
+      font-size: .95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      margin-top: .5rem;
+    }
+
+    .btn-login:hover {
+      background: var(--green-mid);
+      transform: translateY(-1px);
+    }
+
+    .btn-login:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-box {
+      background: var(--danger-bg);
+      border: 1px solid rgba(192, 57, 43, .25);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: .875rem;
+      color: var(--danger);
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .error-box.show {
+      display: block;
+    }
+
+    .hint {
+      margin-top: 1.5rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .hint p {
+      font-size: .78rem;
+      color: var(--text-light);
+    }
+
+    .hint code {
+      background: var(--green-pale);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: .76rem;
+      color: var(--green);
+      font-family: monospace;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: .82rem;
+      color: var(--text-light);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--green);
+    }
+
+    .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, .4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .6s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="brand">
+      <div class="brand-icon"><img src="../immagini/diamond.png"></div>
+      <h1>Area Riservata</h1>
+      <p>Circolo Tennis Brescia — Admin</p>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-wrap">
+          <input type="text" id="username" name="username" autocomplete="username" placeholder="admin" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••"
+            required />
+          <button type="button" class="toggle-pw" id="togglePw" aria-label="Mostra password">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-login" id="btnLogin">
+        <span id="btnText">Accedi</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </form>
+
+    <div class="hint">
+      <p>Credenziali default: <code>admin</code> / <code>Admin2026!</code></p>
+      <p style="margin-top:.4rem;font-size:.72rem;">Cambia la password dopo il primo accesso.</p>
+    </div>
+
+    <a href="../pages/index.html" class="back-link">← Torna al sito</a>
+  </div>
+
+  <script>
+    const API = '../api'; 
+
+    function showError(msg) {
+      const box = document.getElementById('errorBox');
+      box.textContent = msg;
+      box.classList.add('show');
+    }
+    function hideError() { document.getElementById('errorBox').classList.remove('show'); }
+
+    function setLoading(on) {
+      document.getElementById('btnLogin').disabled = on;
+      document.getElementById('btnText').style.display = on ? 'none' : 'inline';
+      document.getElementById('spinner').style.display = on ? 'block' : 'none';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideError();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      if (!username || !password) { showError('Inserisci username e password.'); return; }
+
+      setLoading(true);
+      try {
+        const res = await fetch(`${API}/auth/login.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!data.success) {
+          showError(data.error || 'Errore di accesso.');
+        } else {
+          // Salva token
+          sessionStorage.setItem('ota_token', data.token);
+          sessionStorage.setItem('ota_user', JSON.stringify(data.user));
+          window.location.href = 'dashboard.html';
+        }
+      } catch (err) {
+        showError('Impossibile raggiungere il server. Controlla la connessione.');
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    // Se già loggato, redirect diretto
+    if (sessionStorage.getItem('ota_token')) {
+      window.location.href = 'dashboard.html';
+    }
+  </script>
+</body>
+
+</html>

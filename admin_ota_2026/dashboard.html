@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Admin — OTA</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --green: #2D5016;
+      --green-mid: #3D6B1F;
+      --green-light: #E8F0DC;
+      --green-pale: #F4F8EE;
+      --gold: #B8922A;
+      --cream: #FAF8F4;
+      --white: #FFFFFF;
+      --text-dark: #1A1A18;
+      --text-mid: #4A4A45;
+      --text-light: #8A8A82;
+      --border: #E2DDD5;
+      --sidebar-w: 240px;
+      --danger: #C0392B;
+      --danger-bg: #FDECEA;
+      --success: #1E7E34;
+      --success-bg: #EAF4ED;
+      --font-d: 'Cormorant Garamond', Georgia, serif;
+      --font-b: 'DM Sans', system-ui, sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--font-b);
+      background: var(--cream);
+      color: var(--text-dark);
+    }
+
+    /* ── Layout ── */
+    .app {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--green);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-brand {
+      padding: 1.5rem 1.25rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .sb-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .sb-logo-icon {
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    .sb-logo-text {
+      font-family: var(--font-d);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .sb-logo-sub {
+      font-size: .6rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .45);
+      font-family: var(--font-b);
+    }
+
+    .sidebar-nav {
+      padding: 1rem 0;
+      flex: 1;
+    }
+
+    .nav-section {
+      padding: .5rem 1rem .25rem;
+      font-size: .65rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .35);
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 1.25rem;
+      color: rgba(255, 255, 255, .7);
+      text-decoration: none;
+      font-size: .875rem;
+      transition: background .15s, color .15s;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .08);
+      color: var(--white);
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+      color: var(--white);
+    }
+
+    .nav-item .ni-icon {
+      font-size: 1rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, .1);
+    }
+
+    .user-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .15);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .8rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: .82rem;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-role {
+      font-size: .68rem;
+      color: rgba(255, 255, 255, .45);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .btn-logout {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, .45);
+      cursor: pointer;
+      font-size: .8rem;
+      padding: 2px 6px;
+      transition: color .2s;
+    }
+
+    .btn-logout:hover {
+      color: var(--white);
+    }
+
+    /* ── Main ── */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .topbar h2 {
+      font-family: var(--font-d);
+      font-size: 1.4rem;
+      color: var(--green);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .content {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    /* ── Panels (tabs) ── */
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    /* ── Stat cards ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-label {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .stat-value {
+      font-family: var(--font-d);
+      font-size: 2.2rem;
+      color: var(--green);
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .stat-sub {
+      font-size: .78rem;
+      color: var(--text-light);
+    }
+
+    /* ── Upload zone ── */
+    .upload-box {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      background: var(--green-pale);
+      transition: border-color .2s, background .2s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .upload-box:hover,
+    .upload-box.drag {
+      border-color: var(--green);
+      background: var(--green-light);
+    }
+
+    .upload-box input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .upload-icon {
+      font-size: 2.5rem;
+      margin-bottom: .75rem;
+    }
+
+    .upload-box h3 {
+      font-family: var(--font-d);
+      font-size: 1.2rem;
+      color: var(--green);
+      margin-bottom: .35rem;
+    }
+
+    .upload-box p {
+      font-size: .85rem;
+      color: var(--text-mid);
+    }
+
+    .upload-form {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .upload-form h4 {
+      font-family: var(--font-d);
+      font-size: 1.1rem;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 1rem;
+    }
+
+    .fg label {
+      font-size: .73rem;
+      font-weight: 500;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-mid);
+    }
+
+    .fg input,
+    .fg select,
+    .fg textarea {
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-family: var(--font-b);
+      font-size: .9rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .fg input:focus,
+    .fg select:focus,
+    .fg textarea:focus {
+      border-color: var(--green);
+    }
+
+    .fg textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Preview griglia */
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .preview-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 1;
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-item .rm {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(192, 57, 43, .85);
+      color: #fff;
+      border: none;
+      font-size: .75rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Galleria admin ── */
+    .gallery-toolbar {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: .35rem;
+    }
+
+    .fb {
+      padding: 6px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 99px;
+      background: var(--white);
+      font-size: .8rem;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .fb:hover,
+    .fb.active {
+      border-color: var(--green);
+      color: var(--green);
+      background: var(--green-pale);
+    }
+
+    .search-box {
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: var(--font-b);
+      font-size: .875rem;
+      outline: none;
+      flex: 1;
+      max-width: 260px;
+    }
+
+    .search-box:focus {
+      border-color: var(--green);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .admin-photo-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+
+    .admin-photo-card:hover {
+      box-shadow: 0 4px 20px rgba(45, 80, 22, .1);
+    }
+
+    .apc-img {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--green-pale);
+    }
+
+    .apc-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .apc-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(45, 80, 22, .85);
+      color: #fff;
+      font-size: .62rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .apc-hidden-tag {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, .5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 500;
+    }
+
+    .apc-body {
+      padding: .75rem;
+    }
+
+    .apc-title {
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .apc-meta {
+      font-size: .72rem;
+      color: var(--text-light);
+    }
+
+    .apc-actions {
+      display: flex;
+      gap: .35rem;
+      margin-top: .6rem;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: .75rem;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all .15s;
+      font-family: var(--font-b);
+    }
+
+    .btn-sm:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .btn-sm.danger:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .btn-sm.primary {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .btn-sm.primary:hover {
+      background: var(--green-mid);
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-family: var(--font-b);
+      font-size: .875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all .2s;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-mid);
+    }
+
+    .btn-primary:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+
+    .btn-outline {
+      background: var(--white);
+      color: var(--green);
+      border: 1.5px solid var(--green);
+    }
+
+    .btn-outline:hover {
+      background: var(--green-pale);
+    }
+
+    /* ── Toast ── */
+    .toast-wrap {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .toast {
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: .875rem;
+      font-weight: 500;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .3s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast.success {
+      background: var(--success);
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    /* ── Modal ── */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 18, 8, .6);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal-bg.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h3 {
+      font-family: var(--font-d);
+      font-size: 1.4rem;
+      color: var(--green);
+      margin-bottom: 1.25rem;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--text-light);
+    }
+
+    /* ── Log ── */
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+    }
+
+    .log-table th {
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 500;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: .68rem;
+      color: var(--text-light);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .log-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-mid);
+      vertical-align: middle;
+    }
+
+    .log-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .log-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: .68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .lb-login {
+      background: #EAF4ED;
+      color: var(--success);
+    }
+
+    .lb-upload {
+      background: var(--green-light);
+      color: var(--green);
+    }
+
+    .lb-delete {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .lb-update {
+      background: #FEF9EC;
+      color: #8B6914;
+    }
+
+    .lb-default {
+      background: var(--cream);
+      color: var(--text-mid);
+    }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: .5rem;
+      display: none;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--green);
+      border-radius: 99px;
+      width: 0;
+      transition: width .3s;
+    }
+
+    /* ── Empty state ── */
+    .empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-light);
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty h3 {
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      margin-bottom: .35rem;
+    }
+
+    /* ── Responsive ── */
+    @media(max-width:900px) {
+      .sidebar {
+        display: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width:560px) {
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .content {
+        padding: 1.25rem;
+      }
+
+      .admin-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <a href="../pages/index.html" class="sb-logo">
+          <span class="sb-logo-icon"><img src="../immagini/diamond.png"></span>
+          <div>
+            <div class="sb-logo-text">OTA Admin</div>
+            <div class="sb-logo-sub">Circolo Tennis Brescia</div>
+          </div>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">Principale</div>
+        <button class="nav-item active" data-panel="dashboard"><span class="ni-icon">◈</span> Dashboard</button>
+        <div class="nav-section">Galleria</div>
+        <button class="nav-item" data-panel="upload"><span class="ni-icon">↑</span> Carica foto</button>
+        <button class="nav-item" data-panel="manage"><span class="ni-icon">▦</span> Gestisci foto</button>
+        <div class="nav-section">Sistema</div>
+        <button class="nav-item" data-panel="logs"><span class="ni-icon">≡</span> Log attività</button>
+        <button class="nav-item" data-panel="settings"><span class="ni-icon">⚙</span> Impostazioni</button>
+        <div class="nav-section">Sito</div>
+        <a href="../pages/galleria.html" class="nav-item" target="_blank"><span class="ni-icon">↗</span> Vedi
+          galleria</a>
+        <a href="../pages/index.html" class="nav-item" target="_blank"><span class="ni-icon">↗</span> Vedi sito</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-pill">
+          <div class="user-avatar" id="userAvatar">A</div>
+          <div class="user-info">
+            <div class="user-name" id="userName">...</div>
+            <div class="user-role" id="userRole">...</div>
+          </div>
+          <button class="btn-logout" id="btnLogout" title="Disconnetti">✕</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <h2 id="topbarTitle">Dashboard</h2>
+        <div class="topbar-actions">
+          <button class="btn btn-primary" id="topUploadBtn" style="display:none;" onclick="switchPanel('upload')">↑
+            Carica foto</button>
+        </div>
+      </div>
+
+      <div class="content">
+
+        <!-- ── DASHBOARD ── -->
+        <div class="panel active" id="panel-dashboard">
+          <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+              <div class="stat-label">Foto totali</div>
+              <div class="stat-value" id="statTotal">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Foto visibili</div>
+              <div class="stat-value" id="statVisible">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Nascoste</div>
+              <div class="stat-value" id="statHidden">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Spazio usato</div>
+              <div class="stat-value" id="statSize">—</div>
+              <div class="stat-sub">MB</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+            <!-- Categorie -->
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+              <div
+                style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">
+                Foto per categoria</div>
+              <div id="catBars"></div>
+            </div>
+            <!-- Ultime foto -->
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+              <div
+                style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">
+                Ultime caricate</div>
+              <div id="recentPhotos" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── UPLOAD ── -->
+        <div class="panel" id="panel-upload">
+          <div class="upload-box" id="dropZone">
+            <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple />
+            <div class="upload-icon">📷</div>
+            <h3>Trascina le foto qui</h3>
+            <p>oppure clicca per selezionare • JPG, PNG, WebP, GIF • max 8 MB per file</p>
+          </div>
+
+          <div id="previewSection" style="display:none;margin-top:1.5rem;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+              <span style="font-size:.85rem;color:var(--text-mid);">File selezionati: <strong
+                  id="fileCount">0</strong></span>
+              <button class="btn-sm" id="clearFiles">Svuota</button>
+            </div>
+            <div class="preview-grid" id="previewGrid"></div>
+
+            <div class="upload-form">
+              <h4>Dettagli foto</h4>
+              <div class="form-row">
+                <div class="fg">
+                  <label>Categoria *</label>
+                  <select id="upCategory">
+                    <option value="campi">Campi da Tennis</option>
+                    <option value="bar">Bar & Lounge</option>
+                    <option value="ristorante">Ristorante</option>
+                    <option value="eventi">Eventi & Tornei</option>
+                    <option value="altro" selected>Altro</option>
+                  </select>
+                </div>
+                <div class="fg">
+                  <label>Titolo (applicato a tutte)</label>
+                  <input type="text" id="upTitle" placeholder="es. Campo 1 in estate" />
+                </div>
+              </div>
+              <div class="fg">
+                <label>Descrizione (opzionale)</label>
+                <textarea id="upDesc" placeholder="Breve descrizione delle foto…"></textarea>
+              </div>
+
+              <div class="progress-wrap" id="progressWrap">
+                <div class="progress-bar" id="progressBar"></div>
+              </div>
+              <div id="uploadStatus" style="font-size:.82rem;color:var(--text-mid);margin:.5rem 0;display:none;"></div>
+
+              <button class="btn btn-primary" id="btnUpload">↑ Carica foto</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MANAGE ── -->
+        <div class="panel" id="panel-manage">
+          <div class="gallery-toolbar">
+            <div class="filter-group" id="adminFilters">
+              <button class="fb active" data-cat="tutti">Tutti</button>
+              <button class="fb" data-cat="campi">Campi</button>
+              <button class="fb" data-cat="bar">Bar</button>
+              <button class="fb" data-cat="ristorante">Ristorante</button>
+              <button class="fb" data-cat="eventi">Eventi</button>
+              <button class="fb" data-cat="altro">Altro</button>
+            </div>
+            <input type="search" class="search-box" id="searchInput" placeholder="Cerca per titolo…" />
+            <span style="font-size:.8rem;color:var(--text-light);" id="photoCountLabel"></span>
+          </div>
+          <div class="admin-grid" id="adminGrid"></div>
+        </div>
+
+        <!-- ── LOGS ── -->
+        <div class="panel" id="panel-logs">
+          <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Utente</th>
+                  <th>Azione</th>
+                  <th>Dettagli</th>
+                </tr>
+              </thead>
+              <tbody id="logBody">
+                <tr>
+                  <td colspan="4" style="text-align:center;padding:2rem;color:var(--text-light);">Caricamento…</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn btn-outline" id="loadMoreLogs" style="margin-top:1rem;">Carica altri</button>
+        </div>
+
+        <!-- ── SETTINGS ── -->
+        <div class="panel" id="panel-settings">
+          <div style="max-width:480px;">
+            <div
+              style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.75rem;margin-bottom:1.5rem;">
+              <h3 style="font-family:var(--font-d);font-size:1.3rem;color:var(--green);margin-bottom:1.25rem;">Cambia
+                password</h3>
+              <div class="fg"><label>Password attuale</label><input type="password" id="oldPw" /></div>
+              <div class="fg"><label>Nuova password</label><input type="password" id="newPw" /></div>
+              <div class="fg"><label>Conferma nuova password</label><input type="password" id="confPw" /></div>
+              <div id="pwError" style="font-size:.82rem;color:var(--danger);margin-bottom:.75rem;display:none;"></div>
+              <button class="btn btn-primary" id="btnChangePw">Aggiorna password</button>
+            </div>
+
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:1.75rem;">
+              <h3 style="font-family:var(--font-d);font-size:1.3rem;color:var(--green);margin-bottom:1rem;">Informazioni
+                account</h3>
+              <div id="accountInfo" style="font-size:.9rem;color:var(--text-mid);line-height:2;"></div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </main>
+  </div><!-- /app -->
+
+  <!-- MODAL EDIT PHOTO -->
+  <div class="modal-bg" id="editModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <h3>Modifica foto</h3>
+      <input type="hidden" id="editPhotoId" />
+      <div class="fg"><label>Titolo</label><input type="text" id="editTitle" /></div>
+      <div class="fg"><label>Categoria</label>
+        <select id="editCategory">
+          <option value="campi">Campi da Tennis</option>
+          <option value="bar">Bar & Lounge</option>
+          <option value="ristorante">Ristorante</option>
+          <option value="eventi">Eventi & Tornei</option>
+          <option value="altro">Altro</option>
+        </select>
+      </div>
+      <div class="fg"><label>Descrizione</label><textarea id="editDesc"></textarea></div>
+      <div style="display:flex;gap:.75rem;margin-top:.5rem;">
+        <button class="btn btn-primary" id="btnSaveEdit">Salva</button>
+        <button class="btn btn-outline" id="btnCancelEdit">Annulla</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <script>
+    // ── Config ──────────────────────────────────────────────
+    const API = '../api';
+    let authToken = null;
+    let currentUser = null;
+    let allPhotos = [];
+    let activeFilter = 'tutti';
+    let searchQuery = '';
+    let logsOffset = 0;
+
+    // ── Auth guard ──────────────────────────────────────────
+    function init() {
+      authToken = sessionStorage.getItem('ota_token');
+      const userRaw = sessionStorage.getItem('ota_user');
+      if (!authToken || !userRaw) { window.location.href = 'login.html'; return; }
+      currentUser = JSON.parse(userRaw);
+
+      document.getElementById('userAvatar').textContent = currentUser.full_name.charAt(0).toUpperCase();
+      document.getElementById('userName').textContent = currentUser.full_name;
+      document.getElementById('userRole').textContent = currentUser.role;
+      document.getElementById('accountInfo').innerHTML =
+        `<div>Username: <strong>${currentUser.username}</strong></div>
+     <div>Email: <strong>${currentUser.email}</strong></div>
+     <div>Ruolo: <strong>${currentUser.role}</strong></div>`;
+
+      loadDashboard();
+    }
+
+    // ── Fetch helper ─────────────────────────────────────────
+    async function apiFetch(path, opts = {}) {
+      const res = await fetch(API + path, {
+        ...opts,
+        headers: { 'X-OTA-Token': authToken, ...(opts.headers || {}) }
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) { sessionStorage.clear(); window.location.href = 'login.html'; }
+      return data;
+    }
+
+    // ── Toast ────────────────────────────────────────────────
+    function toast(msg, type = 'success') {
+      const el = document.createElement('div');
+      el.className = `toast ${type}`;
+      el.textContent = msg;
+      document.getElementById('toastWrap').appendChild(el);
+      requestAnimationFrame(() => { el.classList.add('show'); });
+      setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 400); }, 3000);
+    }
+
+    // ── Panel navigation ─────────────────────────────────────
+    const panelTitles = {
+      dashboard: 'Dashboard', upload: 'Carica Foto',
+      manage: 'Gestisci Galleria', logs: 'Log Attività', settings: 'Impostazioni'
+    };
+
+    function switchPanel(name) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('panel-' + name)?.classList.add('active');
+      document.querySelector(`[data-panel="${name}"]`)?.classList.add('active');
+      document.getElementById('topbarTitle').textContent = panelTitles[name] || '';
+      document.getElementById('topUploadBtn').style.display = name === 'manage' ? 'flex' : 'none';
+
+      if (name === 'dashboard') loadDashboard();
+      if (name === 'manage') loadManage();
+      if (name === 'logs') loadLogs(true);
+    }
+
+    document.querySelectorAll('[data-panel]').forEach(btn => {
+      btn.addEventListener('click', () => switchPanel(btn.dataset.panel));
+    });
+
+    // ── Dashboard ────────────────────────────────────────────
+    async function loadDashboard() {
+      const data = await apiFetch('/admin/dashboard.php?resource=stats');
+      if (!data.success) return;
+      const s = data.stats;
+      document.getElementById('statTotal').textContent = s.total_photos;
+      document.getElementById('statVisible').textContent = s.visible_photos;
+      document.getElementById('statHidden').textContent = s.hidden_photos;
+      document.getElementById('statSize').textContent = s.total_size_mb;
+
+      // Category bars
+      const catBars = document.getElementById('catBars');
+      const maxCat = Math.max(...s.by_category.map(c => c.count), 1);
+      catBars.innerHTML = s.by_category.map(c => `
+    <div style="margin-bottom:.75rem;">
+      <div style="display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-mid);margin-bottom:3px;">
+        <span>${c.label}</span><strong>${c.count}</strong>
+      </div>
+      <div style="height:6px;background:var(--border);border-radius:99px;overflow:hidden;">
+        <div style="height:100%;width:${c.count ? Math.round(c.count / maxCat * 100) : 0}%;background:var(--green);border-radius:99px;transition:width .4s;"></div>
+      </div>
+    </div>`).join('');
+
+      // Recent photos
+      const rp = document.getElementById('recentPhotos');
+      if (!data.recent_photos.length) {
+        rp.innerHTML = '<p style="font-size:.85rem;color:var(--text-light);">Nessuna foto ancora.</p>'; return;
+      }
+      rp.innerHTML = data.recent_photos.map(p => `
+    <div style="display:flex;gap:.75rem;align-items:center;">
+      <img src="${p.url}" style="width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" alt="${p.title}"/>
+      <div style="min-width:0;">
+        <div style="font-size:.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${p.title}</div>
+        <div style="font-size:.72rem;color:var(--text-light);">${p.category} · ${formatDate(p.created_at)}</div>
+      </div>
+    </div>`).join('');
+    }
+
+    // ── Upload ───────────────────────────────────────────────
+    let filesToUpload = [];
+
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault(); dropZone.classList.remove('drag');
+      handleFiles(e.dataTransfer.files);
+    });
+    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+    function handleFiles(files) {
+      const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
+      if (!arr.length) { toast('Seleziona file immagine validi.', 'error'); return; }
+      filesToUpload = [...filesToUpload, ...arr];
+      renderPreviews();
+    }
+
+    function renderPreviews() {
+      const section = document.getElementById('previewSection');
+      const grid = document.getElementById('previewGrid');
+      document.getElementById('fileCount').textContent = filesToUpload.length;
+      section.style.display = filesToUpload.length ? 'block' : 'none';
+      grid.innerHTML = filesToUpload.map((f, i) => {
+        const url = URL.createObjectURL(f);
+        return `<div class="preview-item">
+      <img src="${url}" alt="${f.name}"/>
+      <button class="rm" onclick="removeFile(${i})">✕</button>
+    </div>`;
+      }).join('');
+    }
+
+    function removeFile(i) {
+      filesToUpload.splice(i, 1);
+      renderPreviews();
+    }
+
+    document.getElementById('clearFiles').addEventListener('click', () => { filesToUpload = []; renderPreviews(); });
+
+    document.getElementById('btnUpload').addEventListener('click', async () => {
+      if (!filesToUpload.length) { toast('Nessun file selezionato.', 'error'); return; }
+      const category = document.getElementById('upCategory').value;
+      const title = document.getElementById('upTitle').value.trim();
+      const desc = document.getElementById('upDesc').value.trim();
+      const btn = document.getElementById('btnUpload');
+      const prog = document.getElementById('progressWrap');
+      const bar = document.getElementById('progressBar');
+      const status = document.getElementById('uploadStatus');
+
+      btn.disabled = true;
+      prog.style.display = 'block';
+      status.style.display = 'block';
+
+      let done = 0;
+      for (const file of filesToUpload) {
+        status.textContent = `Caricamento ${done + 1} di ${filesToUpload.length}: ${file.name}`;
+        const fd = new FormData();
+        fd.append('photo', file);
+        fd.append('category', category);
+        fd.append('title', title || file.name.replace(/\.[^.]+$/, ''));
+        fd.append('description', desc);
+        try {
+          const res = await fetch(API + '/gallery/upload.php', {
+            method: 'POST', headers: { 'X-OTA-Token': authToken }, body: fd
+          });
+          const data = await res.json();
+          if (!data.success) toast(`Errore: ${data.error}`, 'error');
+        } catch { toast(`Errore caricando ${file.name}`, 'error'); }
+        done++;
+        bar.style.width = Math.round(done / filesToUpload.length * 100) + '%';
+      }
+
+      toast(`${done} foto caricate con successo!`);
+      filesToUpload = [];
+      renderPreviews();
+      fileInput.value = '';
+      document.getElementById('upTitle').value = '';
+      document.getElementById('upDesc').value = '';
+      bar.style.width = '0';
+      prog.style.display = 'none';
+      status.style.display = 'none';
+      btn.disabled = false;
+    });
+
+    // ── Manage Galleria ──────────────────────────────────────
+    async function loadManage() {
+      const data = await apiFetch('/gallery/photos.php/all');
+      if (!data.success) return;
+      allPhotos = data.photos;
+      renderAdminGrid();
+    }
+
+    function renderAdminGrid() {
+      const grid = document.getElementById('adminGrid');
+      let photos = allPhotos;
+      if (activeFilter !== 'tutti') photos = photos.filter(p => p.category_slug === activeFilter);
+      if (searchQuery) photos = photos.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+      document.getElementById('photoCountLabel').textContent = `${photos.length} foto`;
+
+      if (!photos.length) {
+        grid.innerHTML = `<div class="empty" style="grid-column:1/-1">
+      <div class="empty-icon">🔍</div>
+      <h3>Nessuna foto trovata</h3>
+    </div>`; return;
+      }
+
+      grid.innerHTML = photos.map(p => `
+    <div class="admin-photo-card" data-id="${p.id}">
+      <div class="apc-img">
+        <img src="${p.url}" alt="${p.title}" loading="lazy"/>
+        <div class="apc-badge">${p.category_label}</div>
+        ${!p.is_visible ? '<div class="apc-hidden-tag">Nascosta</div>' : ''}
+      </div>
+      <div class="apc-body">
+        <div class="apc-title" title="${p.title}">${p.title}</div>
+        <div class="apc-meta">${formatDate(p.created_at)} · ${formatSize(p.file_size)}</div>
+        <div class="apc-actions">
+          <button class="btn-sm" onclick="editPhoto(${p.id})">✏ Modifica</button>
+          <button class="btn-sm" onclick="toggleVisibility(${p.id})">${p.is_visible ? '👁 Nascondi' : '👁 Pubblica'}</button>
+          <button class="btn-sm danger" onclick="deletePhoto(${p.id})">🗑</button>
+        </div>
+      </div>
+    </div>`).join('');
+    }
+
+    // Filtri admin
+    document.querySelectorAll('#adminFilters .fb').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#adminFilters .fb').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.cat;
+        renderAdminGrid();
+      });
+    });
+    document.getElementById('searchInput').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      renderAdminGrid();
+    });
+
+    // Toggle visibilità
+    async function toggleVisibility(id) {
+      const photo = allPhotos.find(p => p.id === id);
+      if (!photo) return;
+      const res = await apiFetch(`/gallery/photos.php/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_visible: !photo.is_visible })
+      });
+      if (res.success) {
+        toast(res.message);
+        loadManage();
+      } else toast(res.error, 'error');
+    }
+
+    // Elimina
+    async function deletePhoto(id) {
+      const photo = allPhotos.find(p => p.id === id);
+      if (!confirm(`Eliminare la foto "${photo?.title}"?\nL'operazione non è reversibile.`)) return;
+      const res = await apiFetch(`/gallery/photos.php/${id}`, { method: 'DELETE' });
+      if (res.success) { toast('Foto eliminata.'); loadManage(); }
+      else toast(res.error, 'error');
+    }
+
+    // Modifica
+    function editPhoto(id) {
+      const photo = allPhotos.find(p => p.id === id);
+      if (!photo) return;
+      document.getElementById('editPhotoId').value = id;
+      document.getElementById('editTitle').value = photo.title;
+      document.getElementById('editCategory').value = photo.category_slug;
+      document.getElementById('editDesc').value = photo.description || '';
+      document.getElementById('editModal').classList.add('open');
+    }
+
+    document.getElementById('modalClose').addEventListener('click', () => document.getElementById('editModal').classList.remove('open'));
+    document.getElementById('btnCancelEdit').addEventListener('click', () => document.getElementById('editModal').classList.remove('open'));
+
+    document.getElementById('btnSaveEdit').addEventListener('click', async () => {
+      const id = parseInt(document.getElementById('editPhotoId').value);
+      const res = await apiFetch(`/gallery/photos.php/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: document.getElementById('editTitle').value.trim(),
+          category: document.getElementById('editCategory').value,
+          description: document.getElementById('editDesc').value.trim(),
+        })
+      });
+      if (res.success) { toast('Foto aggiornata!'); document.getElementById('editModal').classList.remove('open'); loadManage(); }
+      else toast(res.error, 'error');
+    });
+
+    // ── Log attività ─────────────────────────────────────────
+    async function loadLogs(reset = false) {
+      if (reset) { logsOffset = 0; document.getElementById('logBody').innerHTML = ''; }
+      const data = await apiFetch(`/admin/logs.php?limit=30&offset=${logsOffset}`);
+      if (!data.success) return;
+
+      const badgeClass = (a) => {
+        if (a.includes('login')) return 'lb-login';
+        if (a.includes('upload') || a.includes('add')) return 'lb-upload';
+        if (a.includes('delete')) return 'lb-delete';
+        if (a.includes('update') || a.includes('edit') || a.includes('toggle')) return 'lb-update';
+        return 'lb-default';
+      };
+
+      const rows = data.logs.map(l => `
+    <tr>
+      <td style="white-space:nowrap;">${formatDate(l.created_at, true)}</td>
+      <td>${l.user_name || '—'}</td>
+      <td><span class="log-badge ${badgeClass(l.action)}">${l.action}</span></td>
+      <td style="color:var(--text-light);">${l.message || l.details || '—'}</td>
+    </tr>`).join('');
+
+      document.getElementById('logBody').insertAdjacentHTML('beforeend', rows);
+      logsOffset += 30;
+      document.getElementById('loadMoreLogs').style.display = data.logs.length < 30 ? 'none' : 'inline-flex';
+    }
+
+    document.getElementById('loadMoreLogs').addEventListener('click', () => loadLogs(false));
+
+    // ── Cambio password ──────────────────────────────────────
+    document.getElementById('btnChangePw').addEventListener('click', async () => {
+      const oldPw = document.getElementById('oldPw').value;
+      const newPw = document.getElementById('newPw').value;
+      const conf = document.getElementById('confPw').value;
+      const errEl = document.getElementById('pwError');
+      errEl.style.display = 'none';
+
+      const res = await apiFetch('/auth/change-password.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ old_password: oldPw, new_password: newPw, confirm_password: conf })
+      });
+
+      if (res.success) {
+        toast('Password aggiornata!');
+        ['oldPw', 'newPw', 'confPw'].forEach(id => document.getElementById(id).value = '');
+      } else {
+        errEl.textContent = res.error;
+        errEl.style.display = 'block';
+      }
+    });
+
+    // ── Logout ───────────────────────────────────────────────
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await apiFetch('/auth/logout.php', { method: 'POST' });
+      sessionStorage.clear();
+      window.location.href = 'login.html';
+    });
+
+    // ── Utility ─────────────────────────────────────────────
+    function formatDate(iso, withTime = false) {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      const date = d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+      if (!withTime) return date;
+      return date + ' ' + d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    }
+    function formatSize(bytes) {
+      if (!bytes) return '—';
+      if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+      return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    }
+
+    // ── Start ────────────────────────────────────────────────
+    init();
+  </script>
+</body>
+
+</html>
