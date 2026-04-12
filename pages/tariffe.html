@@ -10,7 +10,24 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet" />
-  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    /* Skeleton loader */
+    .skel {
+      background: linear-gradient(90deg, #e8f0dc 25%, #f4f8ee 50%, #e8f0dc 75%);
+      background-size: 200% 100%;
+      animation: skel 1.4s infinite;
+      border-radius: 6px;
+    }
+    @keyframes skel { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .skel-card { height: 340px; border-radius: 14px; }
+    .skel-row  { height: 48px; margin-bottom: 8px; }
+    .pricing-error {
+      text-align: center; padding: 3rem;
+      color: var(--text-light); font-size: .95rem;
+    }
+    .pricing-error a { color: var(--green); text-decoration: underline; cursor: pointer; }
+  </style>
 </head>
 
 <body>
@@ -61,82 +78,17 @@
   </section>
 
   <!-- TESSERE -->
-  <section class="section">
+  <section class="section" id="tessere">
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Tessere associative</span>
         <h2>Scegli la tua<br /><em>membership.</em></h2>
       </div>
-      <div class="pricing-grid">
-        <!-- Ospite -->
-        <div class="price-card">
-          <div class="price-header">
-            <h3>Ospite</h3>
-            <div style="display:flex;align-items:baseline;gap:6px;margin-top:0.75rem;">
-              <span class="price-tag">€ 18</span>
-              <span class="price-period">/ ora campo</span>
-            </div>
-          </div>
-          <div class="price-body">
-            <ul class="price-features">
-              <li><img src="../immagini/check.png">Gioco campo senza tessera</li>
-              <li><img src="../immagini/check.png">Accesso al bar e ristorante</li>
-              <li><img src="../immagini/check.png">Disponibile su richiesta in segreteria</li>
-              <li><img src="../immagini/check.png">Soggetto a disponibilità</li>
-            </ul>
-          </div>
-          <div class="price-cta-wrap">
-            <a href="contatti.html" class="btn-primary">Prenota</a>
-          </div>
-        </div>
-        <!-- Socio Standard -->
-        <div class="price-card featured">
-          <div class="price-header">
-            <span class="price-badge">Più scelto</span>
-            <h3>Socio Standard</h3>
-            <div style="display:flex;align-items:baseline;gap:6px;margin-top:0.75rem;">
-              <span class="price-tag">€ 280</span>
-              <span class="price-period">/ anno</span>
-            </div>
-          </div>
-          <div class="price-body">
-            <ul class="price-features">
-              <li><img src="../immagini/check.png">Tessera annuale con quota sociale</li>
-              <li><img src="../immagini/check.png">Tariffa agevolata campo: <strong>€ 10 / ora</strong></li>
-              <li><img src="../immagini/check.png">Accesso prioritario alle prenotazioni</li>
-              <li><img src="../immagini/check.png">Sconto 10% al bar e ristorante</li>
-              <li><img src="../immagini/check.png">Partecipazione ai tornei interni</li>
-              <li><img src="../immagini/check.png">Newsletter e eventi riservati</li>
-            </ul>
-          </div>
-          <div class="price-cta-wrap">
-            <a href="contatti.html" class="btn-primary">Diventa socio</a>
-          </div>
-        </div>
-        <!-- Socio Premium -->
-        <div class="price-card">
-          <div class="price-header">
-            <h3>Socio Premium</h3>
-            <div style="display:flex;align-items:baseline;gap:6px;margin-top:0.75rem;">
-              <span class="price-tag">€ 520</span>
-              <span class="price-period">/ anno</span>
-            </div>
-          </div>
-          <div class="price-body">
-            <ul class="price-features">
-              <li><img src="../immagini/check.png">Tutti i vantaggi della tessera Standard</li>
-              <li><img src="../immagini/check.png">Tariffa agevolata campo: <strong>€ 7 / ora</strong></li>
-              <li><img src="../immagini/check.png">2 ingressi ospite gratuiti al mese</li>
-              <li><img src="../immagini/check.png">Sconto 20% al ristorante</li>
-              <li><img src="../immagini/check.png">Uso degli spogliatoi VIP</li>
-              <li><img src="../immagini/check.png">1 lezione privata inclusa</li>
-              <li><img src="../immagini/check.png">Parcheggio riservato</li>
-            </ul>
-          </div>
-          <div class="price-cta-wrap">
-            <a href="contatti.html" class="btn-primary">Diventa socio</a>
-          </div>
-        </div>
+      <div class="pricing-grid" id="membershipGrid">
+        <!-- Skeleton -->
+        <div class="skel skel-card"></div>
+        <div class="skel skel-card"></div>
+        <div class="skel skel-card"></div>
       </div>
       <p style="text-align:center;margin-top:2rem;font-size:0.82rem;color:var(--text-light);">Tessere famiglia e junior
         disponibili su richiesta · Prezzi IVA inclusa · Anno tennistico: 1 aprile – 31 marzo</p>
@@ -150,64 +102,9 @@
         <span class="section-tag">Scuola Tennis</span>
         <h2>Corsi per<br /><em>ogni livello.</em></h2>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem;">
-          <span class="section-tag" style="margin-bottom:0.75rem;display:block;">Bambini (4–14 anni)</span>
-          <h3 style="color:var(--green);margin-bottom:0.75rem;">Mini tennis & Junior</h3>
-          <p style="color:var(--text-mid);font-size:0.92rem;margin-bottom:1.25rem;">Programmi specifici per età con
-            materiali adattati e metodo ludico. Il modo migliore per innamorarsi del tennis fin da piccoli.</p>
-          <table style="width:100%;font-size:0.88rem;border-collapse:collapse;">
-            <thead>
-              <tr style="border-bottom:1px solid var(--border);">
-                <th style="text-align:left;padding:6px 0;color:var(--text-light);font-weight:400;">Corso</th>
-                <th style="text-align:right;padding:6px 0;color:var(--text-light);font-weight:400;">Prezzo / trimestre
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:8px 0;">Mini tennis (4–6 anni)</td>
-                <td style="text-align:right;font-weight:500;color:var(--green);">€ 180</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:8px 0;">Under 10</td>
-                <td style="text-align:right;font-weight:500;color:var(--green);">€ 220</td>
-              </tr>
-              <tr>
-                <td style="padding:8px 0;">Junior 11–14 anni</td>
-                <td style="text-align:right;font-weight:500;color:var(--green);">€ 240</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem;">
-          <span class="section-tag" style="margin-bottom:0.75rem;display:block;">Adulti</span>
-          <h3 style="color:var(--green);margin-bottom:0.75rem;">Corsi adulti & lezioni private</h3>
-          <p style="color:var(--text-mid);font-size:0.92rem;margin-bottom:1.25rem;">Per principianti, giocatori
-            intermedi e avanzati. Gruppi da max 4 persone per garantire un apprendimento efficace.</p>
-          <table style="width:100%;font-size:0.88rem;border-collapse:collapse;">
-            <thead>
-              <tr style="border-bottom:1px solid var(--border);">
-                <th style="text-align:left;padding:6px 0;color:var(--text-light);font-weight:400;">Corso</th>
-                <th style="text-align:right;padding:6px 0;color:var(--text-light);font-weight:400;">Prezzo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:8px 0;">Gruppo principianti (trim.)</td>
-                <td style="text-align:right;font-weight:500;color:var(--green);">€ 270</td>
-              </tr>
-              <tr style="border-bottom:1px solid var(--border);">
-                <td style="padding:8px 0;">Gruppo avanzati (trim.)</td>
-                <td style="text-align:right;font-weight:500;color:var(--green);">€ 300</td>
-              </tr>
-              <tr>
-                <td style="padding:8px 0;">Lezione privata (60 min)</td>
-                <td style="text-align:right;font-weight:500;color:var(--green);">€ 55</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div id="coursesGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;">
+        <div class="skel skel-card"></div>
+        <div class="skel skel-card"></div>
       </div>
     </div>
   </section>
@@ -219,52 +116,14 @@
         <span class="section-tag">Prenotazione campo</span>
         <h2>Tariffe<br /><em>giornaliere e serali.</em></h2>
       </div>
-      <div style="overflow:auto;border:1px solid var(--border);border-radius:var(--r-lg);">
-        <table style="width:100%;border-collapse:collapse;font-size:0.92rem;">
-          <thead>
-            <tr style="background:var(--green);color:var(--white);">
-              <th style="padding:14px 20px;text-align:left;font-weight:500;letter-spacing:0.04em;">Superficie</th>
-              <th style="padding:14px 20px;text-align:center;font-weight:500;">08:00–17:00</th>
-              <th style="padding:14px 20px;text-align:center;font-weight:500;">17:00–22:00</th>
-              <th style="padding:14px 20px;text-align:center;font-weight:500;">Weekend</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid var(--border);">
-              <td style="padding:14px 20px;font-weight:500;color:var(--green);">Terra rossa (Soci)</td>
-              <td style="padding:14px 20px;text-align:center;">€ 8 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 10 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 10 / ora</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border);background:var(--green-pale);">
-              <td style="padding:14px 20px;font-weight:500;color:var(--green);">Terra rossa (Ospiti)</td>
-              <td style="padding:14px 20px;text-align:center;">€ 16 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 18 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 18 / ora</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border);">
-              <td style="padding:14px 20px;font-weight:500;color:var(--green);">Erba sintetica (Soci)</td>
-              <td style="padding:14px 20px;text-align:center;">€ 9 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 11 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 11 / ora</td>
-            </tr>
-            <tr style="border-bottom:1px solid var(--border);background:var(--green-pale);">
-              <td style="padding:14px 20px;font-weight:500;color:var(--green);">Cemento (Soci)</td>
-              <td style="padding:14px 20px;text-align:center;">€ 9 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 11 / ora</td>
-              <td style="padding:14px 20px;text-align:center;">€ 11 / ora</td>
-            </tr>
-            <tr>
-              <td style="padding:14px 20px;color:var(--text-mid);">Noleggio racchetta</td>
-              <td style="padding:14px 20px;text-align:center;color:var(--text-mid);">€ 4</td>
-              <td style="padding:14px 20px;text-align:center;color:var(--text-mid);">€ 4</td>
-              <td style="padding:14px 20px;text-align:center;color:var(--text-mid);">€ 4</td>
-            </tr>
-          </tbody>
-        </table>
+      <div id="courtsTable" style="overflow:auto;border:1px solid var(--border);border-radius:var(--r-lg);">
+        <div class="skel skel-row" style="margin:1rem;"></div>
+        <div class="skel skel-row" style="margin:1rem;"></div>
+        <div class="skel skel-row" style="margin:1rem;"></div>
       </div>
-      <p style="margin-top:1rem;font-size:0.82rem;color:var(--text-light);">* Illuminazione serale inclusa nel prezzo ·
-        Palline non incluse (disponibili in segreteria a € 4 per tubetto)</p>
+      <p style="margin-top:1rem;font-size:0.82rem;color:var(--text-light);" id="courtsNote">
+        * Illuminazione serale inclusa nel prezzo · Palline non incluse (disponibili in segreteria)
+      </p>
     </div>
   </section>
 
@@ -321,7 +180,201 @@
       </div>
     </div>
   </footer>
+
   <script src="../main.js"></script>
+  <script>
+    // ── Config ──────────────────────────────────────────────
+    const API_BASE = '../api';
+
+    // ── Formatta prezzo ─────────────────────────────────────
+    function fmtPrice(n) {
+      return '€ ' + Number(n).toLocaleString('it-IT', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+    }
+
+    // ── Render Tessere ──────────────────────────────────────
+    function renderMemberships(memberships) {
+      const grid = document.getElementById('membershipGrid');
+      if (!memberships.length) {
+        grid.innerHTML = '<div class="pricing-error">Nessuna tessera disponibile al momento.</div>';
+        return;
+      }
+      grid.innerHTML = memberships.map(m => `
+        <div class="price-card ${m.is_featured ? 'featured' : ''}">
+          <div class="price-header">
+            ${m.badge_text ? `<span class="price-badge">${m.badge_text}</span>` : ''}
+            <h3>${m.name}</h3>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:0.75rem;">
+              <span class="price-tag">${fmtPrice(m.price)}</span>
+              <span class="price-period">${m.period}</span>
+            </div>
+          </div>
+          <div class="price-body">
+            <ul class="price-features">
+              ${m.features.map(f => `
+                <li><img src="../immagini/check.png">${f}</li>
+              `).join('')}
+            </ul>
+          </div>
+          <div class="price-cta-wrap">
+            <a href="contatti.html" class="btn-primary">${m.slug === 'ospite' ? 'Prenota' : 'Diventa socio'}</a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── Render Corsi ────────────────────────────────────────
+    function renderCourses(groups) {
+      const grid = document.getElementById('coursesGrid');
+      if (!groups.length) {
+        grid.innerHTML = '<div class="pricing-error">Nessun corso disponibile al momento.</div>';
+        return;
+      }
+      // Raggruppa per group_slug
+      const grouped = {};
+      groups.forEach(c => {
+        if (!grouped[c.group_slug]) {
+          grouped[c.group_slug] = { label: c.group_label, items: [] };
+        }
+        grouped[c.group_slug].items.push(c);
+      });
+
+      // Icona e colore per gruppo
+      const groupMeta = {
+        'bambini': { icon: '🎾', title: 'Mini tennis & Junior', desc: 'Programmi specifici per età con materiali adattati e metodo ludico. Il modo migliore per innamorarsi del tennis fin da piccoli.' },
+        'adulti':  { icon: '🏆', title: 'Corsi adulti & lezioni private', desc: 'Per principianti, giocatori intermedi e avanzati. Gruppi da max 4 persone per garantire un apprendimento efficace.' },
+      };
+
+      grid.innerHTML = Object.entries(grouped).map(([slug, group]) => {
+        const meta = groupMeta[slug] || { icon: '📋', title: group.label, desc: '' };
+        return `
+        <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem;">
+          <span class="section-tag" style="margin-bottom:0.75rem;display:block;">${group.label}</span>
+          <h3 style="color:var(--green);margin-bottom:0.75rem;">${meta.title}</h3>
+          <p style="color:var(--text-mid);font-size:0.92rem;margin-bottom:1.25rem;">${meta.desc}</p>
+          <table style="width:100%;font-size:0.88rem;border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border);">
+                <th style="text-align:left;padding:6px 0;color:var(--text-light);font-weight:400;">Corso</th>
+                <th style="text-align:right;padding:6px 0;color:var(--text-light);font-weight:400;">Prezzo</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${group.items.map((c, i) => `
+                <tr style="${i < group.items.length - 1 ? 'border-bottom:1px solid var(--border);' : ''}">
+                  <td style="padding:8px 0;">${c.name}</td>
+                  <td style="text-align:right;font-weight:500;color:var(--green);">${fmtPrice(c.price)} <span style="font-weight:400;color:var(--text-light);font-size:.8em;">${c.period}</span></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>`;
+      }).join('');
+    }
+
+    // ── Render Campi ────────────────────────────────────────
+    function renderCourts(courts, extras) {
+      const wrap = document.getElementById('courtsTable');
+
+      // Righe campi
+      const courtRows = courts.map((c, i) => `
+        <tr style="${i % 2 !== 0 ? 'background:var(--green-pale);' : ''}border-bottom:1px solid var(--border);">
+          <td style="padding:14px 20px;font-weight:500;color:var(--green);">${c.surface_label}</td>
+          <td style="padding:14px 20px;text-align:center;">${fmtPrice(c.price_day)} / ora</td>
+          <td style="padding:14px 20px;text-align:center;">${fmtPrice(c.price_evening)} / ora</td>
+          <td style="padding:14px 20px;text-align:center;">${fmtPrice(c.price_weekend)} / ora</td>
+        </tr>
+      `).join('');
+
+      // Righe extra
+      const extraRows = extras.map(e => `
+        <tr>
+          <td style="padding:14px 20px;color:var(--text-mid);">${e.name}${e.note ? ` <span style="font-size:.8em;color:var(--text-light);">(${e.note})</span>` : ''}</td>
+          <td style="padding:14px 20px;text-align:center;color:var(--text-mid);">${fmtPrice(e.price)}</td>
+          <td style="padding:14px 20px;text-align:center;color:var(--text-mid);">${fmtPrice(e.price)}</td>
+          <td style="padding:14px 20px;text-align:center;color:var(--text-mid);">${fmtPrice(e.price)}</td>
+        </tr>
+      `).join('');
+
+      wrap.innerHTML = `
+        <table style="width:100%;border-collapse:collapse;font-size:0.92rem;">
+          <thead>
+            <tr style="background:var(--green);color:var(--white);">
+              <th style="padding:14px 20px;text-align:left;font-weight:500;letter-spacing:0.04em;">Superficie</th>
+              <th style="padding:14px 20px;text-align:center;font-weight:500;">08:00–17:00</th>
+              <th style="padding:14px 20px;text-align:center;font-weight:500;">17:00–22:00</th>
+              <th style="padding:14px 20px;text-align:center;font-weight:500;">Weekend</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${courtRows}
+            ${extraRows}
+          </tbody>
+        </table>`;
+    }
+
+    // ── Error state ─────────────────────────────────────────
+    function showError(containerId, msg) {
+      document.getElementById(containerId).innerHTML =
+        `<div class="pricing-error">${msg} <a onclick="loadPricing()">Riprova</a></div>`;
+    }
+
+    // ── Fetch & render ──────────────────────────────────────
+    async function loadPricing() {
+      try {
+        const res = await fetch(`${API_BASE}/pricing/public.php`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || 'Errore API');
+
+        renderMemberships(data.memberships);
+        // courses dall'API public arriva già come array flat con group_slug
+        renderCourses(data.courses.flatMap ? data.courses.flatMap(g => g.items ? g.items : [g]) : data.courses);
+        renderCourts(data.courts, data.extras);
+
+      } catch (err) {
+        console.error('Errore caricamento tariffe:', err);
+        showError('membershipGrid', 'Impossibile caricare le tariffe.');
+        showError('coursesGrid', 'Impossibile caricare i corsi.');
+        showError('courtsTable', 'Impossibile caricare le tariffe dei campi.');
+      }
+    }
+
+    // Adatta courses dall'API (public.php restituisce array di gruppi con .items)
+    // ma anche array flat se il DB restituisce un formato diverso
+    async function loadPricingFull() {
+      try {
+        const res = await fetch(`${API_BASE}/pricing/public.php`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data.success) throw new Error(data.error || 'Errore API');
+
+        renderMemberships(data.memberships);
+
+        // courses: array di oggetti {slug, label, items[]}
+        if (Array.isArray(data.courses) && data.courses[0]?.items) {
+          // formato raggruppato dal PHP
+          const flat = data.courses.reduce((acc, g) => {
+            g.items.forEach(i => acc.push({ ...i, group_slug: g.slug, group_label: g.label }));
+            return acc;
+          }, []);
+          renderCourses(flat);
+        } else {
+          renderCourses(data.courses || []);
+        }
+
+        renderCourts(data.courts, data.extras);
+
+      } catch (err) {
+        console.error('Errore caricamento tariffe:', err);
+        showError('membershipGrid', 'Impossibile caricare le tariffe. <a onclick="loadPricingFull()">Riprova</a>');
+        showError('coursesGrid', '');
+        document.getElementById('courtsTable').innerHTML =
+          '<div class="pricing-error">Impossibile caricare le tariffe dei campi.</div>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPricingFull);
+  </script>
 </body>
 
 </html>
