@@ -43,7 +43,7 @@ if ($resource === 'photos.php' && $idParam === 0 && $parts[$apiIndex + 3] === 'a
          ORDER BY p.sort_order ASC, p.created_at DESC'
     );
     foreach ($photos as &$p) {
-        $p['url'] = UPLOAD_URL . $p['filepath'];
+        $p['url'] = '../public\uploads/' . ltrim($p['filepath'], '/');
     }
     jsonSuccess(['photos' => $photos, 'total' => count($photos)]);
 }
@@ -70,7 +70,7 @@ if ($resource === 'photos.php' && $idParam === 0 && $method === 'GET') {
     );
 
     foreach ($photos as &$p) {
-        $p['url'] = UPLOAD_URL . $p['filepath'];
+        $p['url'] = '../public\uploads/' . ltrim($p['filepath'], '/');
     }
 
     jsonSuccess(['photos' => $photos, 'total' => count($photos)]);
@@ -116,7 +116,7 @@ if ($resource === 'photos.php' && $idParam > 0 && $method === 'PUT' && !$action)
          FROM gallery_photos p JOIN gallery_categories c ON c.id = p.category_id
          WHERE p.id = ?', [$idParam]
     );
-    $updated['url'] = UPLOAD_URL . $updated['filepath'];
+    $updated['url'] = '../public\uploads/' . ltrim($updated['filepath'], '/');
 
     jsonSuccess(['photo' => $updated], 'Foto aggiornata.');
 }

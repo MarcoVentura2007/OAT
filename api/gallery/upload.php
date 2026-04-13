@@ -105,6 +105,6 @@ $photo = Database::fetchOne(
      WHERE p.id = ?',
     [$photoId]
 );
-$photo['url'] = UPLOAD_URL . $photo['filepath'];
+$photo['url'] = '../public\uploads/' . ltrim($photo['filepath'], '/');
 
 jsonSuccess(['photo' => $photo], 'Foto caricata con successo.');

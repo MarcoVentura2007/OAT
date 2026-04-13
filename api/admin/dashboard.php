@@ -33,7 +33,7 @@ if ($resource === 'stats' && $method === 'GET') {
          FROM gallery_photos p JOIN gallery_categories c ON c.id = p.category_id
          ORDER BY p.created_at DESC LIMIT 5'
     );
-    foreach ($recentPhotos as &$p) { $p['url'] = UPLOAD_URL . $p['filepath']; }
+    foreach ($recentPhotos as &$p) { $p['url'] = '../public\uploads/' . ltrim($p['filepath'], '/'); }
 
     jsonSuccess([
         'stats' => [

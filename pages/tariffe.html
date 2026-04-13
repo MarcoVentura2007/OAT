@@ -201,8 +201,11 @@
       grid.innerHTML = memberships.map(m => `
         <div class="price-card ${m.is_featured ? 'featured' : ''}">
           <div class="price-header">
-            ${m.badge_text ? `<span class="price-badge">${m.badge_text}</span>` : ''}
-            <h3>${m.name}</h3>
+            <div class="price-title-row">
+              <h3>${m.name}</h3>
+              ${m.badge_text ? `<span class="price-badge">${m.badge_text}</span>` : ''}
+            </div>
+
             <div style="display:flex;align-items:baseline;gap:6px;margin-top:0.75rem;">
               <span class="price-tag">${fmtPrice(m.price)}</span>
               <span class="price-period">${m.period}</span>
