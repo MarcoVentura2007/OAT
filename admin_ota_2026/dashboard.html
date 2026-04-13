@@ -8,1049 +8,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet" />
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    :root {
-      --green: #2D5016;
-      --green-mid: #3D6B1F;
-      --green-light: #E8F0DC;
-      --green-pale: #F4F8EE;
-      --gold: #B8922A;
-      --cream: #FAF8F4;
-      --white: #FFFFFF;
-      --text-dark: #1A1A18;
-      --text-mid: #4A4A45;
-      --text-light: #8A8A82;
-      --border: #E2DDD5;
-      --sidebar-w: 240px;
-      --danger: #C0392B;
-      --danger-bg: #FDECEA;
-      --success: #1E7E34;
-      --success-bg: #EAF4ED;
-      --font-d: 'Cormorant Garamond', Georgia, serif;
-      --font-b: 'DM Sans', system-ui, sans-serif;
-    }
-
-    html,
-    body {
-      height: 100%;
-      font-family: var(--font-b);
-      background: var(--cream);
-      color: var(--text-dark);
-    }
-
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: var(--sidebar-w);
-      background: var(--green);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      overflow-y: auto;
-    }
-
-    .sidebar-brand {
-      padding: 1.5rem 1.25rem 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, .1);
-    }
-
-    .sb-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-
-    .sb-logo-icon {
-      color: var(--gold);
-      font-size: 1.1rem;
-    }
-
-    .sb-logo-text {
-      font-family: var(--font-d);
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--white);
-      line-height: 1;
-    }
-
-    .sb-logo-sub {
-      font-size: .6rem;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, .45);
-      font-family: var(--font-b);
-    }
-
-    .sidebar-nav {
-      padding: 1rem 0;
-      flex: 1;
-    }
-
-    .nav-section {
-      padding: .5rem 1rem .25rem;
-      font-size: .65rem;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, .35);
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 1.25rem;
-      color: rgba(255, 255, 255, .7);
-      text-decoration: none;
-      font-size: .875rem;
-      transition: background .15s, color .15s;
-      cursor: pointer;
-      border: none;
-      background: none;
-      width: 100%;
-      text-align: left;
-    }
-
-    .nav-item:hover {
-      background: rgba(255, 255, 255, .08);
-      color: var(--white);
-    }
-
-    .nav-item.active {
-      background: rgba(255, 255, 255, .12);
-      color: var(--white);
-    }
-
-    .nav-item .ni-icon {
-      font-size: 1rem;
-      width: 20px;
-      text-align: center;
-    }
-
-    .sidebar-footer {
-      padding: 1rem 1.25rem;
-      border-top: 1px solid rgba(255, 255, 255, .1);
-    }
-
-    .user-pill {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .user-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .15);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .8rem;
-      font-weight: 500;
-      flex-shrink: 0;
-    }
-
-    .user-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .user-name {
-      font-size: .82rem;
-      color: var(--white);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .user-role {
-      font-size: .68rem;
-      color: rgba(255, 255, 255, .45);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-    }
-
-    .btn-logout {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, .45);
-      cursor: pointer;
-      font-size: .8rem;
-      padding: 2px 6px;
-      transition: color .2s;
-    }
-
-    .btn-logout:hover {
-      color: var(--white);
-    }
-
-    /* Main */
-    .main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
-
-    .topbar {
-      background: var(--white);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    .topbar h2 {
-      font-family: var(--font-d);
-      font-size: 1.4rem;
-      color: var(--green);
-    }
-
-    .topbar-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .content {
-      padding: 2rem;
-      flex: 1;
-    }
-
-    /* Panels */
-    .panel {
-      display: none;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    /* Stat cards */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .stat-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .stat-label {
-      font-size: .72rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--text-light);
-    }
-
-    .stat-value {
-      font-family: var(--font-d);
-      font-size: 2.2rem;
-      color: var(--green);
-      font-weight: 600;
-      line-height: 1;
-    }
-
-    .stat-sub {
-      font-size: .78rem;
-      color: var(--text-light);
-    }
-
-    /* Buttons */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-family: var(--font-b);
-      font-size: .875rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      transition: all .2s;
-    }
-
-    .btn-primary {
-      background: var(--green);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: var(--green-mid);
-    }
-
-    .btn-primary:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .btn-outline {
-      background: var(--white);
-      color: var(--green);
-      border: 1.5px solid var(--green);
-    }
-
-    .btn-outline:hover {
-      background: var(--green-pale);
-    }
-
-    .btn-sm {
-      padding: 5px 10px;
-      font-size: .75rem;
-      border-radius: 6px;
-      border: 1.5px solid var(--border);
-      background: var(--white);
-      color: var(--text-mid);
-      cursor: pointer;
-      transition: all .15s;
-      font-family: var(--font-b);
-    }
-
-    .btn-sm:hover {
-      border-color: var(--green);
-      color: var(--green);
-    }
-
-    .btn-sm.danger:hover {
-      border-color: var(--danger);
-      color: var(--danger);
-      background: var(--danger-bg);
-    }
-
-    .btn-sm.primary {
-      background: var(--green);
-      color: #fff;
-      border-color: var(--green);
-    }
-
-    .btn-sm.primary:hover {
-      background: var(--green-mid);
-    }
-
-    /* Form */
-    .fg {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 1rem;
-    }
-
-    .fg label {
-      font-size: .73rem;
-      font-weight: 500;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-    }
-
-    .fg input,
-    .fg select,
-    .fg textarea {
-      padding: 10px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      font-family: var(--font-b);
-      font-size: .9rem;
-      color: var(--text-dark);
-      outline: none;
-      transition: border-color .2s;
-    }
-
-    .fg input:focus,
-    .fg select:focus,
-    .fg textarea:focus {
-      border-color: var(--green);
-    }
-
-    .fg input[type=number] {
-      -moz-appearance: textfield;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-
-    .form-row-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1rem;
-    }
-
-    /* Toast */
-    .toast-wrap {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      gap: .5rem;
-    }
-
-    .toast {
-      padding: 12px 18px;
-      border-radius: 8px;
-      font-size: .875rem;
-      font-weight: 500;
-      color: #fff;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all .3s;
-      pointer-events: none;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .toast.success {
-      background: var(--success);
-    }
-
-    .toast.error {
-      background: var(--danger);
-    }
-
-    /* Modal */
-    .modal-bg {
-      position: fixed;
-      inset: 0;
-      background: rgba(10, 18, 8, .6);
-      z-index: 500;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
-    }
-
-    .modal-bg.open {
-      display: flex;
-    }
-
-    .modal {
-      background: var(--white);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 500px;
-      width: 100%;
-      position: relative;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal h3 {
-      font-family: var(--font-d);
-      font-size: 1.4rem;
-      color: var(--green);
-      margin-bottom: 1.25rem;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      color: var(--text-light);
-    }
-
-    /* Log */
-    .log-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .82rem;
-    }
-
-    .log-table th {
-      padding: 10px 12px;
-      text-align: left;
-      font-weight: 500;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      font-size: .68rem;
-      color: var(--text-light);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .log-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-mid);
-      vertical-align: middle;
-    }
-
-    .log-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .log-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 99px;
-      font-size: .68rem;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    .lb-login {
-      background: #EAF4ED;
-      color: var(--success);
-    }
-
-    .lb-upload {
-      background: var(--green-light);
-      color: var(--green);
-    }
-
-    .lb-delete {
-      background: var(--danger-bg);
-      color: var(--danger);
-    }
-
-    .lb-update {
-      background: #FEF9EC;
-      color: #8B6914;
-    }
-
-    .lb-default {
-      background: var(--cream);
-      color: var(--text-mid);
-    }
-
-    /* Upload */
-    .upload-box {
-      border: 2px dashed var(--border);
-      border-radius: 12px;
-      padding: 3rem 2rem;
-      text-align: center;
-      background: var(--green-pale);
-      transition: border-color .2s, background .2s;
-      cursor: pointer;
-      position: relative;
-    }
-
-    .upload-box:hover,
-    .upload-box.drag {
-      border-color: var(--green);
-      background: var(--green-light);
-    }
-
-    .upload-box input[type=file] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-    .upload-box h3 {
-      font-family: var(--font-d);
-      font-size: 1.2rem;
-      color: var(--green);
-      margin-bottom: .35rem;
-    }
-
-    .upload-box p {
-      font-size: .85rem;
-      color: var(--text-mid);
-    }
-
-    .upload-form {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-    }
-
-    .upload-form h4 {
-      font-family: var(--font-d);
-      font-size: 1.1rem;
-      color: var(--green);
-      margin-bottom: 1rem;
-    }
-
-    .preview-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: .75rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .preview-item {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      aspect-ratio: 1;
-    }
-
-    .preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .preview-item .rm {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(192, 57, 43, .85);
-      color: #fff;
-      border: none;
-      font-size: .75rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .gallery-toolbar {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .filter-group {
-      display: flex;
-      gap: .35rem;
-    }
-
-    .fb {
-      padding: 6px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 99px;
-      background: var(--white);
-      font-size: .8rem;
-      color: var(--text-mid);
-      cursor: pointer;
-      transition: all .2s;
-    }
-
-    .fb:hover,
-    .fb.active {
-      border-color: var(--green);
-      color: var(--green);
-      background: var(--green-pale);
-    }
-
-    .search-box {
-      padding: 8px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      font-family: var(--font-b);
-      font-size: .875rem;
-      outline: none;
-      flex: 1;
-      max-width: 260px;
-    }
-
-    .search-box:focus {
-      border-color: var(--green);
-    }
-
-    .admin-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-
-    .admin-photo-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      transition: box-shadow .2s;
-    }
-
-    .admin-photo-card:hover {
-      box-shadow: 0 4px 20px rgba(45, 80, 22, .1);
-    }
-
-    .apc-img {
-      position: relative;
-      aspect-ratio: 4/3;
-      overflow: hidden;
-      background: var(--green-pale);
-    }
-
-    .apc-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .apc-badge {
-      position: absolute;
-      top: 6px;
-      left: 6px;
-      background: rgba(45, 80, 22, .85);
-      color: #fff;
-      font-size: .62rem;
-      padding: 2px 8px;
-      border-radius: 99px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    .apc-hidden-tag {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, .5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: .8rem;
-      font-weight: 500;
-    }
-
-    .apc-body {
-      padding: .75rem;
-    }
-
-    .apc-title {
-      font-size: .88rem;
-      font-weight: 500;
-      color: var(--text-dark);
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .apc-meta {
-      font-size: .72rem;
-      color: var(--text-light);
-    }
-
-    .apc-actions {
-      display: flex;
-      gap: .35rem;
-      margin-top: .6rem;
-    }
-
-    .progress-wrap {
-      width: 100%;
-      height: 6px;
-      background: var(--border);
-      border-radius: 99px;
-      overflow: hidden;
-      margin-top: .5rem;
-      display: none;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: var(--green);
-      border-radius: 99px;
-      width: 0;
-      transition: width .3s;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--text-light);
-    }
-
-    .empty-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .empty h3 {
-      font-size: 1.1rem;
-      color: var(--text-mid);
-      margin-bottom: .35rem;
-    }
-
-    /* ── PRICING PANEL ──────────────────────────────────── */
-    .pricing-tabs {
-      display: flex;
-      gap: .35rem;
-      margin-bottom: 1.75rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 0;
-    }
-
-    .ptab {
-      padding: 10px 18px;
-      font-size: .85rem;
-      cursor: pointer;
-      border: none;
-      background: none;
-      color: var(--text-mid);
-      font-family: var(--font-b);
-      border-bottom: 2px solid transparent;
-      margin-bottom: -1px;
-      transition: color .2s, border-color .2s;
-    }
-
-    .ptab:hover {
-      color: var(--green);
-    }
-
-    .ptab.active {
-      color: var(--green);
-      font-weight: 500;
-      border-bottom-color: var(--green);
-    }
-
-    .ptab-panel {
-      display: none;
-    }
-
-    .ptab-panel.active {
-      display: block;
-    }
-
-    .pricing-section-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .pricing-section-card h4 {
-      font-family: var(--font-d);
-      font-size: 1.2rem;
-      color: var(--green);
-      margin-bottom: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .pricing-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .88rem;
-    }
-
-    .pricing-table th {
-      padding: 9px 12px;
-      text-align: left;
-      font-size: .68rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--text-light);
-      font-weight: 500;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .pricing-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
-      color: var(--text-mid);
-      vertical-align: middle;
-    }
-
-    .pricing-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .pricing-table tr:hover td {
-      background: var(--green-pale);
-    }
-
-    .price-input {
-      width: 90px;
-      padding: 6px 8px;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      font-size: .88rem;
-      font-family: var(--font-b);
-      text-align: right;
-      outline: none;
-      transition: border-color .2s;
-    }
-
-    .price-input:focus {
-      border-color: var(--green);
-    }
-
-    .text-input {
-      width: 100%;
-      padding: 6px 8px;
-      border: 1.5px solid var(--border);
-      border-radius: 6px;
-      font-size: .88rem;
-      font-family: var(--font-b);
-      outline: none;
-      transition: border-color .2s;
-    }
-
-    .text-input:focus {
-      border-color: var(--green);
-    }
-
-    .add-row-form {
-      background: var(--green-pale);
-      border: 1px dashed var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
-      margin-top: 1rem;
-    }
-
-    .add-row-form h5 {
-      font-size: .8rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--text-mid);
-      margin-bottom: 1rem;
-    }
-
-    .feature-list {
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      gap: .5rem;
-      padding: 6px 8px;
-      background: var(--green-pale);
-      border-radius: 6px;
-    }
-
-    .feature-item span {
-      flex: 1;
-      font-size: .88rem;
-      color: var(--text-mid);
-    }
-
-    .membership-grid-admin {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
-
-    @media(max-width:1100px) {
-      .membership-grid-admin {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media(max-width:700px) {
-      .membership-grid-admin {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .membership-admin-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-
-    .membership-admin-card.is-featured {
-      border-color: var(--green);
-      border-width: 2px;
-    }
-
-    .mac-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
-
-    .mac-title {
-      font-family: var(--font-d);
-      font-size: 1.1rem;
-      color: var(--green);
-    }
-
-    .mac-badge {
-      font-size: .65rem;
-      background: var(--gold);
-      color: #fff;
-      padding: 2px 8px;
-      border-radius: 99px;
-      letter-spacing: .08em;
-    }
-
-    .saving-indicator {
-      display: none;
-      font-size: .75rem;
-      color: var(--gold);
-      margin-left: .5rem;
-    }
-
-    .saving-indicator.show {
-      display: inline;
-    }
-
-    @media(max-width:900px) {
-      .sidebar {
-        display: none;
-      }
-
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media(max-width:560px) {
-      .stats-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .content {
-        padding: 1.25rem;
-      }
-
-      .admin-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="../css/styleAdmin.css" />
 </head>
 
 <body>
@@ -1060,28 +18,94 @@
     <aside class="sidebar">
       <div class="sidebar-brand">
         <a href="../pages/index.html" class="sb-logo">
-          <span class="sb-logo-icon">◈</span>
+          <div class="sb-logo-icon-wrap">◈</div>
           <div>
             <div class="sb-logo-text">OTA Admin</div>
             <div class="sb-logo-sub">Circolo Tennis</div>
           </div>
         </a>
       </div>
+
       <nav class="sidebar-nav">
         <div class="nav-section">Principale</div>
-        <button class="nav-item active" data-panel="dashboard"><span class="ni-icon">◈</span> Dashboard</button>
+        <button class="nav-item active" data-panel="dashboard">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/dashboard.png" alt="">
+          </span>
+          <span class="tab-text">
+            Dashboard
+          </span>
+        </button>
+
         <div class="nav-section">Galleria</div>
-        <button class="nav-item" data-panel="upload"><span class="ni-icon">↑</span> Carica foto</button>
-        <button class="nav-item" data-panel="manage"><span class="ni-icon">▦</span> Gestisci foto</button>
+        <button class="nav-item" data-panel="upload">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/upload.png" alt="">
+          </span>
+          <span class="tab-text">
+            Carica foto
+          </span>
+        </button>
+        <button class="nav-item" data-panel="manage">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/image-gallery.png" alt="">
+          </span>
+          <span class="tab-text">
+            Gestisci foto
+          </span>
+        </button>
+
         <div class="nav-section">Contenuti</div>
-        <button class="nav-item" data-panel="pricing"><span class="ni-icon">€</span> Tariffe & Prezzi</button>
+        <button class="nav-item" data-panel="pricing">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/sales.png" alt="">
+          </span>
+          <span class="tab-text">
+            Tariffe & Prezzi
+          </span>
+        </button>
+
+        <div class="nav-divider"></div>
+
         <div class="nav-section">Sistema</div>
-        <button class="nav-item" data-panel="logs"><span class="ni-icon">≡</span> Log attività</button>
-        <button class="nav-item" data-panel="settings"><span class="ni-icon">⚙</span> Impostazioni</button>
+        <button class="nav-item" data-panel="logs">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/log.png" alt="">
+          </span>
+          <span class="tab-text">
+            Log attività
+          </span>
+        </button>
+        <button class="nav-item" data-panel="settings">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/settings.png" alt="">
+          </span>
+          <span class="tab-text">
+            Impostazioni
+          </span>
+        </button>
+
+        <div class="nav-divider"></div>
+
         <div class="nav-section">Sito</div>
-        <a href="../pages/tariffe.html" class="nav-item" target="_blank"><span class="ni-icon">↗</span> Vedi tariffe</a>
-        <a href="../pages/index.html" class="nav-item" target="_blank"><span class="ni-icon">↗</span> Vedi sito</a>
+        <a href="../pages/tariffe.html" class="nav-item" target="_blank">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/maximize.png" alt="">
+          </span>
+          <span class="tab-text">
+            Vedi tariffe
+          </span>
+        </a>
+        <a href="../pages/index.html" class="nav-item" target="_blank">
+          <span class="ni-icon">
+            <img class="side-tab" src="../immagini/maximize.png" alt="">
+          </span>
+          <span class="tab-text">
+            Vedi sito
+          </span>
+        </a>
       </nav>
+
       <div class="sidebar-footer">
         <div class="user-pill">
           <div class="user-avatar" id="userAvatar">A</div>
@@ -1089,7 +113,11 @@
             <div class="user-name" id="userName">...</div>
             <div class="user-role" id="userRole">...</div>
           </div>
-          <button class="btn-logout" id="btnLogout" title="Disconnetti">✕</button>
+          <button class="btn-logout" id="btnLogout" title="Disconnetti">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1 1l10 10M11 1 1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </button>
         </div>
       </div>
     </aside>
@@ -1101,7 +129,7 @@
         <div class="topbar-actions">
           <button class="btn btn-primary" id="topUploadBtn" style="display:none;" onclick="switchPanel('upload')">↑
             Carica foto</button>
-          <button class="btn btn-primary" id="topSavePricingBtn" style="display:none;" onclick="saveAllPricing()">💾
+          <button class="btn btn-primary" id="topSavePricingBtn" style="display:none;" onclick="saveAllPricing()"><img class="save-img" src="../immagini/diskette.png" alt="">
             Salva tariffe</button>
         </div>
       </div>
@@ -1149,7 +177,7 @@
         <div class="panel" id="panel-upload">
           <div class="upload-box" id="dropZone">
             <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif" multiple />
-            <div style="font-size:2.5rem;margin-bottom:.75rem;">📷</div>
+            <div style="font-size:2.5rem;margin-bottom:.75rem;"><img src="../immagini/camera.png" alt=""></div>
             <h3>Trascina le foto qui</h3>
             <p>oppure clicca per selezionare • JPG, PNG, WebP, GIF • max 8 MB per file</p>
           </div>
@@ -1568,9 +596,9 @@
         <div class="apc-title" title="${p.title}">${p.title}</div>
         <div class="apc-meta">${formatDate(p.created_at)} · ${formatSize(p.file_size)}</div>
         <div class="apc-actions">
-          <button class="btn-sm" onclick="editPhoto(${p.id})">✏ Modifica</button>
-          <button class="btn-sm" onclick="toggleVisibility(${p.id})">${p.is_visible ? '👁 Nascondi' : '👁 Pubblica'}</button>
-          <button class="btn-sm danger" onclick="deletePhoto(${p.id})">🗑</button>
+          <button class="btn-sm" onclick="editPhoto(${p.id})">Modifica</button>
+          <button class="btn-sm" onclick="toggleVisibility(${p.id})">${p.is_visible ? 'Nascondi' : 'Pubblica'}</button>
+          <button class="btn-sm danger" onclick="deletePhoto(${p.id})"><img class="del-icon" src="../immagini/bin.png" alt=""/></button>
         </div>
       </div>
     </div>`).join('');
@@ -1642,7 +670,7 @@
       const featureRows = m.features.map(f => `
     <div class="feature-item" data-fid="${f.id}">
       <span>${f.feature_text}</span>
-      <button class="btn-sm" onclick="editFeature(${f.id}, '${escHtml(f.feature_text)}', ${m.id})">✏</button>
+      <button class="btn-sm" onclick="editFeature(${f.id}, '${escHtml(f.feature_text)}', ${m.id})"><img class="del-icon" src="../immagini//edit.png" /></button>
       <button class="btn-sm danger" onclick="deleteFeature(${f.id}, ${m.id})">✕</button>
     </div>`).join('');
 
@@ -1741,7 +769,7 @@
       <td><input type="text" class="text-input" value="${escHtml(c.period)}" id="c-period-${c.id}" style="width:110px;" /></td>
       <td style="white-space:nowrap;">
         <button class="btn-sm primary" onclick="saveCourse(${c.id})">Salva</button>
-        <button class="btn-sm danger" onclick="deleteCourse(${c.id})" style="margin-left:4px;">🗑</button>
+        <button class="btn-sm danger" onclick="deleteCourse(${c.id})" style="margin-left:4px;"><img src="../immagini/bin.png" class="del-icon"/></button>
       </td>
     </tr>`).join('');
     }
@@ -1798,7 +826,7 @@
       <td><input type="number" class="price-input" value="${Number(c.price_weekend).toFixed(2)}" id="ct-wknd-${c.id}" step="0.5" min="0" /></td>
       <td style="white-space:nowrap;">
         <button class="btn-sm primary" onclick="saveCourt(${c.id})">Salva</button>
-        <button class="btn-sm danger" onclick="deleteCourt(${c.id})" style="margin-left:4px;">🗑</button>
+        <button class="btn-sm danger" onclick="deleteCourt(${c.id})" style="margin-left:4px;"><img src="../immagini/bin.png" class="del-icon"/></button>
       </td>
     </tr>`).join('');
     }
@@ -1848,7 +876,7 @@
       <td><input type="text" class="text-input" value="${escHtml(e.note || '')}" id="ex-note-${e.id}" placeholder="Nota opzionale" /></td>
       <td style="white-space:nowrap;">
         <button class="btn-sm primary" onclick="saveExtra(${e.id})">Salva</button>
-        <button class="btn-sm danger" onclick="deleteExtra(${e.id})" style="margin-left:4px;">🗑</button>
+        <button class="btn-sm danger" onclick="deleteExtra(${e.id})" style="margin-left:4px;"><img src="../immagini/bin.png" class="del-icon"/></button>
       </td>
     </tr>`).join('');
     }
