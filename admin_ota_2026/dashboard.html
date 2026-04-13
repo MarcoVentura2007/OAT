@@ -12,6 +12,41 @@
 </head>
 
 <body>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mobile-nav" id="mobileNav">
+
+    <button class="mn-item active" data-panel="dashboard">
+      <img src="../immagini/dashboard.png" alt="" class="mn-icon">
+      Dashboard
+    </button>
+
+    <button class="mn-item" data-panel="upload">
+      <img src="../immagini/upload.png" alt="" class="mn-icon">
+      Carica
+    </button>
+
+    <button class="mn-item" data-panel="manage">
+      <img src="../immagini/image-gallery.png" alt="" class="mn-icon">
+      Galleria
+    </button>
+
+    <button class="mn-item" data-panel="pricing">
+      <img src="../immagini/sales.png" alt="" class="mn-icon">
+      Tariffe
+    </button>
+
+    <button class="mn-item" data-panel="settings">
+      <img src="../immagini/settings.png" alt="" class="mn-icon">
+      Account
+    </button>
+
+    <a class="mn-item" href="../pages/index.html" target="_blank">
+      <img src="../immagini/maximize.png" alt="" class="mn-icon">
+      Sito
+    </a>
+
+  </nav>
   <div class="app">
 
     <!-- SIDEBAR -->
@@ -129,7 +164,8 @@
         <div class="topbar-actions">
           <button class="btn btn-primary" id="topUploadBtn" style="display:none;" onclick="switchPanel('upload')">↑
             Carica foto</button>
-          <button class="btn btn-primary" id="topSavePricingBtn" style="display:none;" onclick="saveAllPricing()"><img class="save-img" src="../immagini/diskette.png" alt="">
+          <button class="btn btn-primary" id="topSavePricingBtn" style="display:none;" onclick="saveAllPricing()"><img
+              class="save-img" src="../immagini/diskette.png" alt="">
             Salva tariffe</button>
         </div>
       </div>
@@ -456,6 +492,9 @@
     const panelTitles = { dashboard: 'Dashboard', upload: 'Carica Foto', manage: 'Gestisci Galleria', pricing: 'Tariffe & Prezzi', logs: 'Log Attività', settings: 'Impostazioni' };
 
     function switchPanel(name) {
+      // Sync mobile nav
+      document.querySelectorAll('.mn-item').forEach(n => n.classList.remove('active'));
+      document.querySelector(`#mobileNav [data-panel="${name}"]`)?.classList.add('active');
       document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       document.getElementById('panel-' + name)?.classList.add('active');
@@ -515,6 +554,50 @@
     </div>`).join('');
     }
 
+    // ── Compressione client-side ──────────────────────────────────────────────────
+    const COMPRESS_MAX_PX = 1920;  // lato lungo massimo in px
+    const COMPRESS_QUALITY = 0.82;  // qualità WebP/JPEG (0–1)
+    const COMPRESS_MIN_BYTES = 300 * 1024; // sotto questa soglia non comprimere
+
+    function compressImage(file) {
+      return new Promise((resolve) => {
+        // GIF e file già piccoli → nessuna compressione
+        if (file.type === 'image/gif' || file.size < COMPRESS_MIN_BYTES) {
+          resolve(file);
+          return;
+        }
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          let w = img.naturalWidth;
+          let h = img.naturalHeight;
+          // Ridimensiona se supera il lato massimo
+          if (w > COMPRESS_MAX_PX || h > COMPRESS_MAX_PX) {
+            if (w >= h) { h = Math.round(h * COMPRESS_MAX_PX / w); w = COMPRESS_MAX_PX; }
+            else { w = Math.round(w * COMPRESS_MAX_PX / h); h = COMPRESS_MAX_PX; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          // PNG rimane PNG (trasparenza), tutto il resto → WebP
+          const outType = file.type === 'image/png' ? 'image/png' : 'image/webp';
+          canvas.toBlob((blob) => {
+            if (blob && blob.size < file.size) {
+              const ext = outType === 'image/png' ? 'png' : 'webp';
+              const newName = file.name.replace(/\.[^.]+$/, '') + '.' + ext;
+              resolve(new File([blob], newName, { type: outType }));
+            } else {
+              resolve(file); // la compressione ha peggiorato → usa originale
+            }
+          }, outType, COMPRESS_QUALITY);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+        img.src = url;
+      });
+    }
+
     // ── Upload ────────────────────────────────────────────────────────────────────
     let filesToUpload = [];
     const dropZone = document.getElementById('dropZone');
@@ -553,10 +636,20 @@
       btn.disabled = true; prog.style.display = 'block'; status.style.display = 'block';
       let done = 0;
       for (const file of filesToUpload) {
-        status.textContent = `Caricamento ${done + 1} di ${filesToUpload.length}: ${file.name}`;
+        // 1. Comprimi prima di inviare
+        status.textContent = `Compressione ${done + 1} di ${filesToUpload.length}: ${file.name}…`;
+        const compressed = await compressImage(file);
+        const savedKB = Math.round((file.size - compressed.size) / 1024);
+        const label = savedKB > 0
+          ? `${compressed.name} (risparmiati ${savedKB} KB)`
+          : compressed.name;
+        // 2. Carica
+        status.textContent = `Caricamento ${done + 1} di ${filesToUpload.length}: ${label}`;
         const fd = new FormData();
-        fd.append('photo', file); fd.append('category', category);
-        fd.append('title', title || file.name.replace(/\.[^.]+$/, '')); fd.append('description', desc);
+        fd.append('photo', compressed);
+        fd.append('category', category);
+        fd.append('title', title || file.name.replace(/\.[^.]+$/, ''));
+        fd.append('description', desc);
         try {
           const res = await fetch(API + '/gallery/upload.php', { method: 'POST', headers: { 'X-OTA-Token': authToken }, body: fd });
           const data = await res.json();

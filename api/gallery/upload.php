@@ -83,6 +83,71 @@ if (!move_uploaded_file($file['tmp_name'], $destPath)) {
     jsonError('Errore nel salvataggio del file.', 500);
 }
 
+// ── Compressione / ridimensionamento server-side ──────────────────
+$maxDim      = 1920;
+$jpegQuality = 82;
+$webpQuality = 82;
+
+if (in_array($mime, ['image/jpeg', 'image/png', 'image/webp'], true) && function_exists('imagecreatefromjpeg')) {
+    $src = match($mime) {
+        'image/jpeg' => @imagecreatefromjpeg($destPath),
+        'image/png'  => @imagecreatefrompng($destPath),
+        'image/webp' => @imagecreatefromwebp($destPath),
+    };
+
+    if ($src !== false) {
+        $origW = imagesx($src);
+        $origH = imagesy($src);
+
+        // Ridimensiona solo se necessario
+        if ($origW > $maxDim || $origH > $maxDim) {
+            if ($origW >= $origH) {
+                $newW = $maxDim;
+                $newH = (int) round($origH * $maxDim / $origW);
+            } else {
+                $newH = $maxDim;
+                $newW = (int) round($origW * $maxDim / $origH);
+            }
+            $dst = imagecreatetruecolor($newW, $newH);
+            // Preserva trasparenza PNG
+            if ($mime === 'image/png') {
+                imagealphablending($dst, false);
+                imagesavealpha($dst, true);
+                $transparent = imagecolorallocatealpha($dst, 0, 0, 0, 127);
+                imagefilledrectangle($dst, 0, 0, $newW, $newH, $transparent);
+            }
+            imagecopyresampled($dst, $src, 0, 0, 0, 0, $newW, $newH, $origW, $origH);
+            imagedestroy($src);
+            $src    = $dst;
+            $width  = $newW;
+            $height = $newH;
+        }
+
+        // JPEG e WebP → converti in WebP per migliore compressione
+        if ($mime === 'image/jpeg' || $mime === 'image/webp') {
+            $newPath = preg_replace('/\.(jpg|jpeg|webp)$/i', '.webp', $destPath);
+            if (function_exists('imagewebp') && imagewebp($src, $newPath, $webpQuality)) {
+                @unlink($destPath);
+                $destPath = $newPath;
+                $filename = basename($newPath);
+                $filepath = $subDir . '/' . $filename;
+                $mime     = 'image/webp';
+                $ext      = 'webp';
+            }
+        } elseif ($mime === 'image/png') {
+            // PNG: ricomprimi in loco (livello 8 su 9)
+            imagepng($src, $destPath, 8);
+        }
+
+        imagedestroy($src);
+
+        // Aggiorna file_size con la dimensione reale post-compressione
+        clearstatcache(true, $destPath);
+        $file['size'] = filesize($destPath);
+    }
+}
+// ── Fine compressione ─────────────────────────────────────────────
+
 // Ottieni sort_order max
 $maxSort = Database::fetchOne('SELECT MAX(sort_order) AS m FROM gallery_photos')['m'] ?? 0;
 

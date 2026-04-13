@@ -7,8 +7,8 @@
 // ── Database ──────────────────────────────────────────────
 define('DB_HOST',    'localhost');
 define('DB_PORT',    3306);
-define('DB_NAME',    'OTA_DB');
-define('DB_USER',    'ota_user');       // utente MySQL dedicato (non root)
+define('DB_NAME',    'ota_db');
+define('DB_USER',    'user');       // utente MySQL dedicato (non root)
 define('DB_PASS',    'OTA_Users_2026'); // password sicura
 define('DB_CHARSET', 'utf8mb4');
 
