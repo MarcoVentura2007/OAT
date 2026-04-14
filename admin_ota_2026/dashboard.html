@@ -1160,7 +1160,7 @@
       const conf = document.getElementById('confPw').value;
       const errEl = document.getElementById('pwError');
       errEl.style.display = 'none';
-      const res = await apiFetch('/auth/change-password.php', {
+      const res = await fetch('../api/auth/change_password.php', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ old_password: oldPw, new_password: newPw, confirm_password: conf })
       });

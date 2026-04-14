@@ -19,14 +19,39 @@
       animation: skel 1.4s infinite;
       border-radius: 6px;
     }
-    @keyframes skel { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-    .skel-card { height: 340px; border-radius: 14px; }
-    .skel-row  { height: 48px; margin-bottom: 8px; }
-    .pricing-error {
-      text-align: center; padding: 3rem;
-      color: var(--text-light); font-size: .95rem;
+
+    @keyframes skel {
+      0% {
+        background-position: 200% 0
+      }
+
+      100% {
+        background-position: -200% 0
+      }
     }
-    .pricing-error a { color: var(--green); text-decoration: underline; cursor: pointer; }
+
+    .skel-card {
+      height: 340px;
+      border-radius: 14px;
+    }
+
+    .skel-row {
+      height: 48px;
+      margin-bottom: 8px;
+    }
+
+    .pricing-error {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-light);
+      font-size: .95rem;
+    }
+
+    .pricing-error a {
+      color: var(--green);
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -221,6 +246,7 @@
           </div>
         </div>
       `).join('');
+      initPricingAccordion();
     }
 
     // ── Render Corsi ────────────────────────────────────────
@@ -242,7 +268,7 @@
       // Icona e colore per gruppo
       const groupMeta = {
         'bambini': { icon: '🎾', title: 'Mini tennis & Junior', desc: 'Programmi specifici per età con materiali adattati e metodo ludico. Il modo migliore per innamorarsi del tennis fin da piccoli.' },
-        'adulti':  { icon: '🏆', title: 'Corsi adulti & lezioni private', desc: 'Per principianti, giocatori intermedi e avanzati. Gruppi da max 4 persone per garantire un apprendimento efficace.' },
+        'adulti': { icon: '🏆', title: 'Corsi adulti & lezioni private', desc: 'Per principianti, giocatori intermedi e avanzati. Gruppi da max 4 persone per garantire un apprendimento efficace.' },
       };
 
       grid.innerHTML = Object.entries(grouped).map(([slug, group]) => {
@@ -313,6 +339,8 @@
         </table>`;
     }
 
+
+
     // ── Error state ─────────────────────────────────────────
     function showError(containerId, msg) {
       document.getElementById(containerId).innerHTML =
@@ -339,6 +367,8 @@
         showError('courtsTable', 'Impossibile caricare le tariffe dei campi.');
       }
     }
+
+
 
     // Adatta courses dall'API (public.php restituisce array di gruppi con .items)
     // ma anche array flat se il DB restituisce un formato diverso
@@ -375,6 +405,52 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadPricingFull);
+
+    // Sostituisce initPricingAccordion() e la chiamata in DOMContentLoaded
+
+    function initPricingAccordion() {
+      if (window.innerWidth > 600) return;
+
+      
+
+      document.querySelectorAll('.price-card').forEach(card => {
+
+        if (card.classList.contains('featured')) {
+          card.classList.add('expanded');
+        }
+        const header = card.querySelector('.price-header');
+        if (!header) return;
+
+        // Inietta la struttura left/right se non già presente
+        if (!header.querySelector('.price-header-left')) {
+          const titleRow = header.querySelector('.price-title-row');
+          const priceRow = header.querySelector('div[style]'); // il div con price-tag e price-period
+
+          const left = document.createElement('div');
+          left.className = 'price-header-left';
+          if (titleRow) left.appendChild(titleRow);
+          if (priceRow) left.appendChild(priceRow);
+
+          const chevron = document.createElement('i');
+          chevron.className = 'price-chevron';
+          chevron.textContent = '▾';
+
+          const right = document.createElement('div');
+          right.className = 'price-header-right';
+          right.appendChild(chevron);
+
+          header.appendChild(left);
+          header.appendChild(right);
+        }
+
+        // Toggle su click (le non-featured partono chiuse)
+        header.addEventListener('click', () => {
+          if (!card) return; 
+          card.classList.toggle('expanded');
+        });
+      });
+    }
+
   </script>
 </body>
 

@@ -1275,10 +1275,8 @@ section {
   border: 1px solid var(--border);
   border-radius: var(--r-lg);
   overflow: hidden;
-
   display: flex;
   flex-direction: column;
-
   transition: box-shadow 0.2s;
 }
 
@@ -1314,6 +1312,8 @@ section {
   padding: 3px 10px;
   border-radius: 99px;
   margin-bottom: 0.75rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .price-header h3 {
@@ -1358,6 +1358,7 @@ section {
 .price-features li img {
   width: 12px;
   height: 12px;
+  flex-shrink: 0;
   margin-bottom: 2px;
 }
 
@@ -1371,10 +1372,167 @@ section {
   text-align: center;
 }
 
+/* ─── Tablet ─── */
 @media (max-width: 900px) {
   .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    gap: 1rem;
+  }
+
+  .price-card.featured {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─── Mobile ─── */
+@media (max-width: 600px) {
+  .pricing-grid {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    gap: 2rem;
+    border-radius: 0;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+
+  .price-card {
+    border: none;
+    border-radius: 20px 20px 20px 20px;
+    border: 1px solid var(--border);
+  }
+
+  .price-card:last-child {
+    border-bottom: none;
+  }
+
+  .price-card.featured {
+    background: var(--green-pale);
+    border-left: 2px solid var(--green);
+  }
+
+  /* Header cliccabile: nome + prezzo + freccia sulla stessa riga */
+  .price-header {
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: none;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .price-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .price-header-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .price-header h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0;
+    white-space: nowrap;
+  }
+
+  .price-tag {
+    font-size: 1.25rem;
+  }
+
+  .price-period {
+    font-size: 0.75rem;
+  }
+
+  .price-title-row {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .price-badge {
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    margin-bottom: 0;
+  }
+
+  /* Freccia */
+  .price-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    color: var(--text-light);
+    font-style: normal;
+    font-size: 0.75rem;
+    transition: transform 0.25s ease, border-color 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .price-card.expanded .price-chevron{
+    transform: rotate(180deg);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  /* Body e CTA collassati */
+  .price-body {
+    padding: 0 1.25rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+  }
+
+  .price-cta-wrap {
+    padding: 0 1.25rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+  }
+
+  /* Espanso */
+  .price-card.expanded .price-body{
+    max-height: 700px;
+    padding: 0.75rem 1.25rem 0.25rem;
+  }
+
+  .price-card.expanded .price-cta-wrap{
+    max-height: 80px;
+    padding: 0.75rem 1.25rem 1.25rem;
+  }
+
+  /* Corsi: stack verticale */
+  #coursesGrid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Tabella campi: scroll orizzontale semplice, niente sticky */
+  #courtsTable {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--r-lg);
+  }
+
+  #courtsTable table {
+    min-width: 480px;
+    width: 100%;
+  }
+
+  #courtsTable th,
+  #courtsTable td {
+    padding: 11px 14px !important;
+    font-size: 0.82rem !important;
+    white-space: nowrap;
   }
 }
 
@@ -1551,6 +1709,8 @@ section {
   border-radius: var(--r-lg);
   overflow: hidden;
   cursor: pointer;
+  max-height: 270px;
+  border: 2px solid var(--border);
 }
 
 .gallery-item img {

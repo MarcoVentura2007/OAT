@@ -40,7 +40,7 @@ if ($resource === 'photos.php' && $idParam === 0 && $parts[$apiIndex + 3] === 'a
          FROM gallery_photos p
          JOIN gallery_categories c ON c.id = p.category_id
          JOIN admin_users u ON u.id = p.uploaded_by
-         ORDER BY p.sort_order ASC, p.created_at DESC'
+         ORDER BY p.sort_order DESC, p.created_at DESC'
     );
     foreach ($photos as &$p) {
         $p['url'] = '../public\uploads/' . ltrim($p['filepath'], '/');
@@ -65,7 +65,7 @@ if ($resource === 'photos.php' && $idParam === 0 && $method === 'GET') {
          FROM gallery_photos p
          JOIN gallery_categories c ON c.id = p.category_id
          WHERE $where
-         ORDER BY p.sort_order ASC, p.created_at DESC",
+         ORDER BY p.sort_order DESC, p.created_at DESC",
         $params
     );
 
